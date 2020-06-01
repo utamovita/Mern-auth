@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^2.2.0",
     "mongoose": "^5.9.16",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -29,5 +30,6 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "nodemon": "^2.0.4"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
