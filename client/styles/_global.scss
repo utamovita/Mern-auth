@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: $c-white;
+  color: $c-black;
+  //font: normal normal normal 1rem $f-baseFontFamily;
+  overflow-x: hidden;
+}
+
+a,
+a:hover,
+a:active,
+a:visited {
+  text-decoration: none;
+}
+
+.custom {
+  .text {
+    &-center {
+      text-align: center;
+    }
+
+    &-left {
+      text-align: left;
+    }
+    
+    &-right {
+      text-align: right;
+    }
+  }
+}

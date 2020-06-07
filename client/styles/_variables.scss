@@ -1,0 +1,23 @@
+/* =Base Colors
+************************************************************** */
+$c-white: #fff;
+$c-black: #000;
+
+/* =Colors
+************************************************************** */
+$c-accentPrimary: $c-white;
+$c-accentSecondary: $c-black;
+$c-razzmatazz: #f50057;
+
+/* =fonts
+************************************************************** */
+$f-fontAwesome: 'Font Awesome 5 Free';
+$f-fontAwesomeBrands: 'Font Awesome 5 Brands';
+$f-baseFontFamily: 'Montserrat', sans-serif;
+
+/* =breaks
+************************************************************** */
+$min-sm: 450px;
+$min-middle: 770px;
+$min-laptop: 990px;
+$min-desktop: 1300px;

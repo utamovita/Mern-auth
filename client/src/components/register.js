@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Register = () => {
   const [state, setState] = React.useState({
+    name: '',
     email: '',
     password: '',
     password2: '',
@@ -22,12 +23,14 @@ const Register = () => {
     e.preventDefault();
 
     const registeredUser = {
+      name: state.name,
       email: state.email,
       password: state.password,
       password2: state.password2,
     };
 
     setState({
+      name: '',
       email: '',
       password: '',
       password2: '',
@@ -39,10 +42,17 @@ const Register = () => {
 
   return (
     <Container>
-      <Typography variant="h2" component="h1">
+      <Typography variant="h2" component="h1" className="text-center">
         Register
       </Typography>
       <form onSubmit={onSubmit}>
+        <TextField
+          name="name"
+          value={state.name}
+          onChange={handleChange}
+          label="Name"
+          variant="outlined"
+        />
         <TextField
           name="email"
           value={state.email}
@@ -77,9 +87,11 @@ const Register = () => {
           Sign in
         </Button>
       </form>
-      <Typography>
+      <Typography className="helper">
         Already have an account?
-        <Link to="/">Sign in</Link>
+        <Link to="/" className="link">
+          Sign in
+        </Link>
       </Typography>
     </Container>
   );

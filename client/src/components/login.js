@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [state, setState] = React.useState({
-    login: '',
+    email: '',
     password: '',
   });
 
@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
 
     const LoggedInUser = {
-      login: state.login,
+      email: state.email,
       password: state.password,
     };
 
@@ -31,15 +31,15 @@ const Login = () => {
 
   return (
     <Container>
-      <Typography variant="h2" component="h1">
+      <Typography variant="h2" component="h1" className="text-center">
         Login
       </Typography>
       <form onSubmit={onSubmit}>
         <TextField
-          name="login"
-          value={state.login}
+          name="email"
+          value={state.email}
           onChange={handleChange}
-          label="Login"
+          label="Email"
           variant="outlined"
         />
         <TextField
@@ -60,9 +60,9 @@ const Login = () => {
           Sign in
         </Button>
       </form>
-      <Typography>
+      <Typography className="helper">
         Dont have an account?
-        <Link to="/register">Sign up</Link>
+        <Link to="/register" className="link">Sign up</Link>
       </Typography>
     </Container>
   );
