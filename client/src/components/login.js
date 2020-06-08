@@ -3,12 +3,16 @@ import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../actions/authActions';
 
 const Login = () => {
   const [state, setState] = React.useState({
     email: '',
     password: '',
   });
+
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setState({
@@ -20,13 +24,12 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const LoggedInUser = {
+    const user = {
       email: state.email,
       password: state.password,
     };
 
-    // eslint-disable-next-line no-console
-    console.log(LoggedInUser);
+    dispatch(loginUser(user));
   };
 
   return (

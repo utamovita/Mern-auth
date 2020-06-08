@@ -23,6 +23,7 @@
     "mongoose": "^5.9.16",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "validator": "^13.0.0"
   },
   "devDependencies": {
@@ -30,6 +31,5 @@
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "nodemon": "^2.0.4"
-  },
-  "proxy": "http://localhost:5000"
+  }
 }
