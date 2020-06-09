@@ -89,7 +89,7 @@ const Register = () => {
       </form>
       <Typography className="helper">
         Already have an account?
-        <Link to="/" className="link">
+        <Link to="/login" className="link">
           Sign in
         </Link>
       </Typography>

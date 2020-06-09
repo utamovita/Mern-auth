@@ -1,21 +1,22 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 import { Container, Button, Typography } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../actions/authActions';
 
 const Dashboard = () => {
-  const history = useHistory();
+  const user = useSelector((state) => state.auth.user.name);
+  const dispatch = useDispatch();
 
   const handleLogOut = () => {
-    history.push('/');
+    dispatch(logoutUser());
   };
 
-  const name = 'sample name';
   return (
     <Container>
       <Typography variant="h4" component="h1">
         Hello,
         {' '}
-        <strong>{name}</strong>
+        <strong>{user}</strong>
       </Typography>
       <Button
         size="large"
