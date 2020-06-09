@@ -1,18 +1,28 @@
-/* eslint-disable consistent-return */
+/* eslint-disable no-shadow */
 /* eslint-disable no-console */
+/* eslint-disable consistent-return */
 const express = require('express');
 
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+
+const secretKey = config.get('secretKey');
 
 // Load input validation
 const validateRegisterInput = require('../../validation/register');
 const validateLoginInput = require('../../validation/login');
 
-// User model
+// Load User model
 const User = require('../../models/User');
 
+// @route POST api/users/register
+// @desc Register user
+// @access Public
 router.post('/register', (req, res) => {
   // Form validation
+
   const { errors, isValid } = validateRegisterInput(req.body);
 
   // Check validation
@@ -21,31 +31,44 @@ router.post('/register', (req, res) => {
   }
 
   User.findOne({ email: req.body.email }).then((user) => {
-    if (user) return res.status(400).json({ email: 'Email already exists' });
-
+    if (user) {
+      return res.status(400).json({ email: 'Email already exists' });
+    }
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
     });
 
-    newUser
-      .save()
-      // eslint-disable-next-line no-shadow
-      .then((user) => res.json(user))
-      .catch((err) => console.log(err));
+    // Hash password before saving in database
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+        newUser
+          .save()
+          .then((user) => res.json(user))
+          .catch((err) => console.log(err));
+      });
+    });
   });
 });
 
+// @route POST api/users/login
+// @desc Login user and return JWT token
+// @access Public
 router.post('/login', (req, res) => {
   // Form validation
+
   const { errors, isValid } = validateLoginInput(req.body);
+
   // Check validation
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
-  const { email, password } = req.body;
+  const { email } = req.body;
+  const { password } = req.body;
 
   // Find user by email
   User.findOne({ email }).then((user) => {
@@ -55,13 +78,34 @@ router.post('/login', (req, res) => {
     }
 
     // Check password
-    if (password === user.password) {
-      return res.status(200).json({ success: 'success' });
-    }
-
-    return res
-      .status(400)
-      .json({ passwordincorrect: 'Password incorrect' });
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (isMatch) {
+        // User matched
+        // Create JWT Payload
+        const payload = {
+          id: user.id,
+          name: user.name,
+        };
+        // Sign token
+        jwt.sign(
+          payload,
+          secretKey,
+          {
+            expiresIn: 31556926, // 1 year in seconds
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: `Bearer ${token}`,
+            });
+          },
+        );
+      } else {
+        return res
+          .status(400)
+          .json({ passwordincorrect: 'Password incorrect' });
+      }
+    });
   });
 });
 
