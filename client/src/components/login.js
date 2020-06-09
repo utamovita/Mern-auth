@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../actions/authActions';
 
 const Login = () => {
-  const [state, setState] = React.useState({
+  const errors = useSelector((state) => state.errors);
+  const dispatch = useDispatch();
+
+  const [state, setState] = useState({
     email: '',
     password: '',
   });
-
-  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setState({
@@ -45,6 +46,8 @@ const Login = () => {
           label="Email"
           variant="outlined"
         />
+        {errors.email}
+        {errors.emailnotfound}
         <TextField
           name="password"
           value={state.password}
@@ -54,6 +57,8 @@ const Login = () => {
           variant="outlined"
           autoComplete="on"
         />
+        {errors.password}
+        {errors.passwordincorrect}
         <Button
           variant="contained"
           size="large"
@@ -65,7 +70,9 @@ const Login = () => {
       </form>
       <Typography className="helper">
         Dont have an account?
-        <Link to="/register" className="link">Sign up</Link>
+        <Link to="/register" className="link">
+          Sign up
+        </Link>
       </Typography>
     </Container>
   );
