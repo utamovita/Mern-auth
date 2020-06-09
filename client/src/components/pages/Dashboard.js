@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Button, Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../actions/authActions';
+import { logoutUser } from '../../actions/authActions';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user.name);

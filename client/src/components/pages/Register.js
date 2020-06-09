@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../actions/authActions';
+import { registerUser } from '../../actions/authActions';
 
-
-const Login = () => {
+const Register = () => {
   const errors = useSelector((state) => state.errors);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
 
-  const [state, setState] = useState({
+  const [state, setState] = React.useState({
+    name: '',
     email: '',
     password: '',
+    password2: '',
   });
 
   if (isAuthenticated) {
@@ -32,29 +33,38 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const user = {
+    const newUser = {
+      name: state.name,
       email: state.email,
       password: state.password,
+      password2: state.password2,
     };
 
-    dispatch(loginUser(user));
+    dispatch(registerUser(newUser, history));
   };
 
   return (
     <Container>
       <Typography variant="h2" component="h1" className="text-center">
-        Login
+        Register
       </Typography>
       <form onSubmit={onSubmit}>
+        <TextField
+          name="name"
+          value={state.name}
+          onChange={handleChange}
+          label="Name"
+          variant="outlined"
+        />
+        {errors.name}
         <TextField
           name="email"
           value={state.email}
           onChange={handleChange}
-          label="Email"
+          label="E-mail"
           variant="outlined"
         />
         {errors.email}
-        {errors.emailnotfound}
         <TextField
           name="password"
           value={state.password}
@@ -65,24 +75,33 @@ const Login = () => {
           autoComplete="on"
         />
         {errors.password}
-        {errors.passwordincorrect}
+        <TextField
+          name="password2"
+          value={state.password2}
+          onChange={handleChange}
+          type="password"
+          label="Repeat password"
+          variant="outlined"
+          autoComplete="on"
+        />
+        {errors.password2}
         <Button
           variant="contained"
-          size="large"
           color="secondary"
+          size="large"
           type="submit"
         >
           Sign in
         </Button>
       </form>
       <Typography className="helper">
-        Dont have an account?
-        <Link to="/register" className="link">
-          Sign up
+        Already have an account?
+        <Link to="/login" className="link">
+          Sign in
         </Link>
       </Typography>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

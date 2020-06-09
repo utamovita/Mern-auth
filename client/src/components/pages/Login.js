@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../actions/authActions';
 
-const Register = () => {
-  const [state, setState] = React.useState({
-    name: '',
+
+const Login = () => {
+  const errors = useSelector((state) => state.errors);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [state, setState] = useState({
     email: '',
     password: '',
-    password2: '',
   });
+
+  if (isAuthenticated) {
+    history.push('/');
+  }
 
   const handleChange = (e) => {
     setState({
@@ -22,44 +32,29 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const registeredUser = {
-      name: state.name,
+    const user = {
       email: state.email,
       password: state.password,
-      password2: state.password2,
     };
 
-    setState({
-      name: '',
-      email: '',
-      password: '',
-      password2: '',
-    });
-
-    // eslint-disable-next-line no-console
-    console.log(registeredUser);
+    dispatch(loginUser(user));
   };
 
   return (
     <Container>
       <Typography variant="h2" component="h1" className="text-center">
-        Register
+        Login
       </Typography>
       <form onSubmit={onSubmit}>
-        <TextField
-          name="name"
-          value={state.name}
-          onChange={handleChange}
-          label="Name"
-          variant="outlined"
-        />
         <TextField
           name="email"
           value={state.email}
           onChange={handleChange}
-          label="E-mail"
+          label="Email"
           variant="outlined"
         />
+        {errors.email}
+        {errors.emailnotfound}
         <TextField
           name="password"
           value={state.password}
@@ -69,32 +64,25 @@ const Register = () => {
           variant="outlined"
           autoComplete="on"
         />
-        <TextField
-          name="password2"
-          value={state.password2}
-          onChange={handleChange}
-          type="password"
-          label="Repeat password"
-          variant="outlined"
-          autoComplete="on"
-        />
+        {errors.password}
+        {errors.passwordincorrect}
         <Button
           variant="contained"
-          color="secondary"
           size="large"
+          color="secondary"
           type="submit"
         >
           Sign in
         </Button>
       </form>
       <Typography className="helper">
-        Already have an account?
-        <Link to="/login" className="link">
-          Sign in
+        Dont have an account?
+        <Link to="/register" className="link">
+          Sign up
         </Link>
       </Typography>
     </Container>
   );
 };
 
-export default Register;
+export default Login;

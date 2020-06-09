@@ -2,11 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import JwtDecode from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import store from '../store';
-import Register from './register';
-import Login from './login';
-import Dashboard from './dashboard';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 import PrivateRoute from './PrivateRoute';
 import setAuthToken from '../utils/setAuthToken';
 import { setCurrentUser, logoutUser } from '../actions/authActions';
@@ -17,7 +17,7 @@ if (localStorage.jwtToken) {
   const token = localStorage.jwtToken;
   setAuthToken(token);
   // Decode token and get user info and exp
-  const decoded = JwtDecode(token);
+  const decoded = jwtDecode(token);
   store.dispatch(setCurrentUser(decoded));
   const currentTime = Date.now() / 1000; // to get in milliseconds
   if (decoded.exp < currentTime) {
