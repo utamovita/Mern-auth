@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
+import { clearErrors } from '../../actions';
 
 const Register = () => {
   const errors = useSelector((state) => state.errors);
@@ -22,6 +23,10 @@ const Register = () => {
   if (isAuthenticated) {
     history.push('/');
   }
+
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
 
   const handleChange = (e) => {
     setState({

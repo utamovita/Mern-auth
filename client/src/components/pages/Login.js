@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextField, Button, Typography, Container,
 } from '@material-ui/core';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
-
+import { clearErrors } from '../../actions';
+import Loading from '../Loading';
 
 const Login = () => {
   const errors = useSelector((state) => state.errors);
@@ -21,6 +22,10 @@ const Login = () => {
   if (isAuthenticated) {
     history.push('/');
   }
+
+  useEffect(() => {
+    dispatch(clearErrors());
+  }, []);
 
   const handleChange = (e) => {
     setState({
@@ -54,7 +59,6 @@ const Login = () => {
           variant="outlined"
         />
         {errors.email}
-        {errors.emailnotfound}
         <TextField
           name="password"
           value={state.password}
@@ -65,7 +69,6 @@ const Login = () => {
           autoComplete="on"
         />
         {errors.password}
-        {errors.passwordincorrect}
         <Button
           variant="contained"
           size="large"
@@ -81,6 +84,7 @@ const Login = () => {
           Sign up
         </Link>
       </Typography>
+      <Loading />
     </Container>
   );
 };

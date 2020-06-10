@@ -2,27 +2,26 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import setAuthToken from '../utils/setAuthToken';
 import {
-  GET_ERRORS,
-  SET_CURRENT_USER,
-  USER_LOADING,
-} from './types';
+  clearErrors, isLoading, isLoaded, getErrors,
+} from '.';
 
 export const setCurrentUser = (decoded) => ({
-  type: SET_CURRENT_USER,
+  type: 'SET_CURRENT_USER',
   payload: decoded,
 });
 
 export const registerUser = (userData, history) => (dispatch) => {
+  dispatch(isLoading());
+  dispatch(clearErrors());
   axios
     .post('/api/users/register', userData)
-    .then((res) => history.push('/'))
-    .catch((err) => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data,
-    }));
+    .then(() => history.push('/'))
+    .catch((err) => dispatch(getErrors(err.response.data)));
 };
 
 export const loginUser = (userData) => (dispatch) => {
+  dispatch(isLoading());
+  dispatch(clearErrors());
   axios
     .post('/api/users/login', userData)
     .then((res) => {
@@ -34,16 +33,13 @@ export const loginUser = (userData) => (dispatch) => {
       const decoded = jwtDecode(token);
       // Set current user
       dispatch(setCurrentUser(decoded));
+      dispatch(isLoaded());
     })
-    .catch((err) => dispatch({
-      type: GET_ERRORS,
-      payload: err.response.data,
-    }));
+    .catch((err) => {
+      dispatch(getErrors(err.response.data));
+      dispatch(isLoaded());
+    });
 };
-
-export const setUserLoading = () => ({
-  type: USER_LOADING,
-});
 
 export const logoutUser = () => (dispatch) => {
   localStorage.removeItem('jwtToken');
